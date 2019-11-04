@@ -6,21 +6,25 @@
 
 **First things first:**
 
-Lista de comandos utilizadas para criação da aplicação & pacotes adicionais:
+Lista de comandos utilizados para criação da aplicação & pacotes adicionais:
 
 ```bash
-    npm init #utilizado para iniciar a aplicação e a instalação do package.json
+    #utilizado para iniciar a aplicação e a instalação do package.json 
+    npm init
 
-    #pacotes extras instalados utilizando o Yarn:
+    #####pacotes extras instalados utilizando o Yarn:######
 
-    yarn add express #framework de Node para trativas de rotas de requests HTTP 🤔
+    #framework de Node para trativas de rotas de requests HTTP 🤔
+    yarn add express
 
-    yarn add body-parser #pacote que auxilia o node a entender requisições recebendo a informação
-                         #em json, recebendo a informação via URL. Semalhante ao método GET do PHP
+    #pacote que auxilia o node a entender requisições recebendo a informação em json, recebendo a informação via URL. Semalhante ao método GET do PHP.
+    yarn add body-parser
 
-    yarn add mongoose #pacote do mongodb
+    #pacote do mongodb
+    yarn add mongoose
 
-    yarn add bcryptjs #biblioteca de incriptação
+    #biblioteca de incriptação
+    yarn add bcryptjs
 ```
 
 ### Criando rota básica
@@ -38,17 +42,17 @@ Exemplo de rota simples criada com o express:
 
 ## MongoDB
 
-Iniciar o mongoDB é muito (muito mesmo) simples. Para iniciar o serviço no terminal, basta digitar `mongo`. Para criar uma base de dados, basta digitar o seguinte comando:
+Iniciar o mongoDB é muito simples (muito mesmo). Para iniciar o serviço no terminal, basta digitar `mongo`. Para criar uma base de dados, basta digitar o seguinte comando:
 
 ```mongodb
     use dataBaseName
 ```
 
-> Detalhe que o mongo utiliza a porta **":27017"**;
+> Detalhe que o mongo utiliza o caminho `mongodb://localhost:27017/` por padrão.;
 
 ---
 
-> A programação relacionada ao mongoDB estão na pasta `src/index.js`.
+> A programação relacionada ao mongoDB está na pasta `src/index.js`.
 
 Uma pasta interessante da estrutura do banco de dados é a `model`. Nela ficam de fato os modelos do banco de dados utilizado na aplicação, como as classes de getters e setters do modelo MVC ou uma tablea do MySQL.
 
@@ -57,8 +61,8 @@ Os Models em si são chamados de `Schema`. É bem parecido com Typescript, isso 
 Um modelo de schema seria:
 
 ```javascript
-    const UserSchema = new mongoose.Schema({
-        name: {
+const UserSchema = new mongoose.Schema({
+    name: {
         type: String,
         require: true
     },
@@ -81,5 +85,5 @@ Um modelo de schema seria:
         type: Date,
         default: Date.now
     }
-    });
+});
 ```

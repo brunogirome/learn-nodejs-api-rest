@@ -2,7 +2,9 @@
 
 - Agradecimentos à Rocketseat: <https://www.youtube.com/watch?v=BN_8bCfVp88>
 
-## NodeJS
+## Aula 1
+
+### NodeJS
 
 **First things first:**
 
@@ -40,7 +42,7 @@ Exemplo de rota simples criada com o express:
     });
 ```
 
-## MongoDB
+### MongoDB
 
 Iniciar o mongoDB é muito simples (muito mesmo). Para iniciar o serviço no terminal, basta digitar `mongo`. Para criar uma base de dados, basta digitar o seguinte comando:
 
@@ -86,4 +88,17 @@ const UserSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+```
+
+## Aula 2
+
+**JWT:** Json Web Token, é um token criptografado utilizado para autenticação do usuário.
+
+```javascript
+    //Aparentemente o findOne retorna false caso não encontrar o
+    //dado, interessante!
+    const user = await User.findOne({ email }).select('+password')
+
+    if (!user)
+        return res.status(400).send({ error: 'User not found' })
 ```

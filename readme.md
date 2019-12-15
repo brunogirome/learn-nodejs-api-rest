@@ -1,6 +1,6 @@
 # Aprendendo a criar uma API com NodeJS, Express e MongoDB
 
-- Agradecimentos à Rocketseat: <https://www.youtube.com/watch?v=BN_8bCfVp88>
+- Vídeo da primeira aula: <https://www.youtube.com/watch?v=BN_8bCfVp88>
 
 ## Aula 1
 
@@ -97,7 +97,7 @@ const UserSchema = new mongoose.Schema({
 É um token criptografado utilizado para autenticação do usuário.
 
 ```javascript
-    //Função queria o token
+    //Função que cria o token
     //"params": objeto com id do usuário passado como parâmetro
     function generateToken ( params = {}) {
     // Parâmetros: id do usuário, chave md5 utilizada na aplicação para tornar o token único,
@@ -127,4 +127,30 @@ const UserSchema = new mongoose.Schema({
         return res.status(400).send({ error: 'User not found' })
 ```
 
-**Middleware:** parada do Express, ele intercepta o controller e as rotas... Antes da rota entrar no controller, ele verifica uma requisção e uma resposta. Ou seja, a entrada do req é verificada pelo middleware.
+### Middleware
+
+Parada do Express, ele intercepta o controller e as rotas... Antes da rota entrar no controller, ele verifica uma requisção. Ou seja, a entrada do req é verificada pelo middleware pra depois executar os comandos da controller.
+
+Legal que caso tu fale pro router utilizar um middleware antes do comando de fato que tu quer executar, ele vai lógicamente executar o router e só depois rodar a requisição do controller. Claro que, isso acontece pelo simples fato do Middleware vir antes na ordem de execução do código, e caso dê erro lá dentro, ele já corta o resto da navegação do usuário dentro da api, app, ou sei lá o que.
+
+```javascript
+    //importanto o middleware
+    const authMiddleware = require('../middlewares/auth')
+
+    //Travando essa rota a um middleware!
+    router.use(authMiddleware)
+
+    router.get("/", (req, res) => {
+        res.send({ ok: true })
+    })
+```
+
+## Aula 3
+
+Adicionada mais duas bibliotecas:
+
+```bash
+    #fs: Filesystem, adiciona ao node a possibilidade de ler arquivos
+    #path: Path, serve para trabalhar com caminhos de pasta
+    yarn add fs path
+```

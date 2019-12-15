@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     // já que o authHeader retorna false caso não for informado
     // um token de autorização
     if (!authHeader)
-        return res.status(401).send({ error: 'No token provied' })
+        return res.status(401).send({ error: 'No token provided' })
 
     // Um token jwt tem o formato: Bearer d077f244def8a70e5ea758bd8352fcd8,
     // logo, a String é splitada com o espaço em duas partes

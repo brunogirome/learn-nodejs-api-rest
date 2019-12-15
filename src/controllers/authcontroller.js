@@ -4,9 +4,24 @@ const express = require('express');
 const User = require('../models/user');
 //importanto bcrypt
 const bcrypt = require('bcryptjs')
+// import do JsonWebToken
+const jwt = require('jsonwebtoken')
+
+//Importando as configs de autenticação
+const authConfig = require('../config/auth.json')
 
 //criando um Router
 const router = express.Router();
+
+//Função que gera o token
+//"params": objeto com id do usuário passado como parâmetro
+function generateToken(params = {}) {
+    // Parâmetros: id do usuário, chave md5 utilizada na aplicação para tornar o token único,
+    // expiresIn: Tempo em segundos para o token expirar. 86400 é equivalente a 1 dia :)
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn: 86400
+    })
+}
 
 //rota de cadastro
 // req: requisção, res: a resposta!
@@ -21,12 +36,11 @@ router.post('/register', async (req, res) => {
 
     try {
         //tenho quase certeza que o findOne é um método do próprio
-        //mongo, então ele tá buscando um email já cadastrado
-        //daí como tem o return, se entrar nesse bloco de if
+        //mongo, então ele tá buscando um email já cadastrado.
+        //Daí como tem o return, se entrar nesse bloco de if,
         //ele automaticamente para o resto da execução
-        if (await User.findOne({ email })) {
+        if (await User.findOne({ email }))
             return res.status(400).send({ error: 'User already exists' });
-        }
 
         //tenho que olhar o await!
         // User.create é comando do Mongo, nada de mais!
@@ -35,14 +49,15 @@ router.post('/register', async (req, res) => {
         // com os dados de um form
         const user = await User.create(req.body);
 
-        //quando a gente cria um registro no mongo, pelo o que
-        //eu entendi, ele retorna diretamente esse dado pra gente
         //pra senha não retornar, é necessário colocar undefined
         //nela
         user.password = undefined;
-        return res.send({ user });
+        return res.send({
+            user,
+            token: generateToken({ id: user.id })
+        });
     } catch (err) {
-        //criando um registrador de falha
+        //criando um retorno de falha
         return res.status(400).send({ error: 'Registration failed...' });
     }
 });
@@ -53,7 +68,7 @@ router.post('/authenticate', async (req, res) => {
     //realiada a desconstrução do objeto req
     const { email, password } = req.body;
 
-    //Verificando se existe esse usuário com email no banco de Dados
+    //Verificando se existe esse usuário com email no Banco de Dados
     //FindOne, método do MongoDB!
     //Como password é definido no mongoose como select false, é 
     //necessário utilizar o +password para ele retornar o dado
@@ -70,10 +85,16 @@ router.post('/authenticate', async (req, res) => {
     if (!await bcrypt.compare(password, user.password))
         return res.status(400).send({ error: 'Invalid password' })
 
-    //Caso passe pelos doois ifs, retornar o usuário
-    res.send({ user })
+    //Removendo o retorno do password no body do usuário
+    user.password = undefined
+
+    //Caso passe pelos dois ifs, retornar o usuário e o token!
+    res.send({
+        user,
+        token: generateToken({ id: user.id })
+    })
 })
 
-//aqui pelo o que entendi é que eu acabei bindando a rota router
+//  aqui pelo o que entendi é que eu acabei bindando a rota router
 // com uma rota auth
 module.exports = app => app.use('/auth', router);

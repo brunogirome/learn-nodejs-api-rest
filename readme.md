@@ -92,7 +92,31 @@ const UserSchema = new mongoose.Schema({
 
 ## Aula 2
 
-**JWT:** Json Web Token, é um token criptografado utilizado para autenticação do usuário.
+### JWT (Json Web Token)
+
+É um token criptografado utilizado para autenticação do usuário.
+
+```javascript
+    //Função queria o token
+    //"params": objeto com id do usuário passado como parâmetro
+    function generateToken ( params = {}) {
+    // Parâmetros: id do usuário, chave md5 utilizada na aplicação para tornar o token único,
+    // expiresIn: Tempo em segundos para o token expirar. 86400 é equivalente a 1 dia :)
+    return jwt.sign(params,   authConfig.secret, {
+            expiresIn: 86400
+        })
+    }
+```
+
+**JsonWebToken:** Pacote do node de autenticação via Token (JWT).
+
+```bash
+    yarn add jsonwebtoken
+```
+
+### Outros
+
+**FindOne:**
 
 ```javascript
     //Aparentemente o findOne retorna false caso não encontrar o
@@ -102,3 +126,5 @@ const UserSchema = new mongoose.Schema({
     if (!user)
         return res.status(400).send({ error: 'User not found' })
 ```
+
+**Middleware:** parada do Express, ele intercepta o controller e as rotas... Antes da rota entrar no controller, ele verifica uma requisção e uma resposta. Ou seja, a entrada do req é verificada pelo middleware.

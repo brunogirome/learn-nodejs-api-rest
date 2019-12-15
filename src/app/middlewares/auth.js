@@ -1,7 +1,7 @@
 //JsonWebToken
 const jwt = require('jsonwebtoken')
 //Importando o nosso secret, palavra chave da aplicação
-const authConfig = require('../config/auth.json')
+const authConfig = require('../../config/auth.json')
 
 // Intercepta a entrada do usuário até o controller, que é
 // o "coração" da aplicação
@@ -45,8 +45,8 @@ module.exports = (req, res, next) => {
     //realizar verificações mais tranquilas antes de partir
     //para a verficação jwt, pra poupar trabalho, basicamente
     //Token, é o token que vem do cliente e que foi splitado
-    //lá em cima, authC.secret, palavra chave da aplicação,
-    //e a fumção atribui um erro, se tiver, e o id do usário
+    //lá em cima, authC.secret, palavra chave da aplicação.
+    //A função atribui um erro, se tiver um erro, e o id do usário
     //caso dê tudo certo. err é booleano, inclusive!
     jwt.verify(token, authConfig.secret, (err, decoded) => {
         //Caso o token não bater com as informações de autenticação
@@ -60,7 +60,7 @@ module.exports = (req, res, next) => {
         //Hmm, acredito que ele altera o dados incorporados da requisição.
         req.userId = decoded.id
         //Como chegamos no final da autenticação, agora é só prosseguir para
-        //o controller desejado
+        //o controller desejado, utilizando o next
         return next()
     })
 

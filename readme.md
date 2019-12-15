@@ -11,7 +11,7 @@
 Lista de comandos utilizados para criação da aplicação & pacotes adicionais:
 
 ```bash
-    #utilizado para iniciar a aplicação e a instalação do package.json 
+    #utilizado para iniciar a aplicação e a instalação do package.json
     npm init
 
     #####pacotes extras instalados utilizando o Yarn:######
@@ -19,7 +19,8 @@ Lista de comandos utilizados para criação da aplicação & pacotes adicionais:
     #framework de Node para trativas de rotas de requests HTTP 🤔
     yarn add express
 
-    #pacote que auxilia o node a entender requisições recebendo a informação em json, recebendo a informação via URL. Semalhante ao método GET do PHP.
+    #pacote que auxilia o node a entender requisições recebendo a informação em json,
+    #recebendo a informação via URL. Semalhante ao método GET do PHP.
     yarn add body-parser
 
     #pacote do mongodb
@@ -51,10 +52,6 @@ Iniciar o mongoDB é muito simples (muito mesmo). Para iniciar o serviço no ter
 ```
 
 > Detalhe que o mongo utiliza o caminho `mongodb://localhost:27017/` por padrão.;
-
----
-
-> A programação relacionada ao mongoDB está na pasta `src/index.js`.
 
 Uma pasta interessante da estrutura do banco de dados é a `model`. Nela ficam de fato os modelos do banco de dados utilizado na aplicação, como as classes de getters e setters do modelo MVC ou uma tablea do MySQL.
 
@@ -129,7 +126,7 @@ const UserSchema = new mongoose.Schema({
 
 ### Middleware
 
-Parada do Express, ele intercepta o controller e as rotas... Antes da rota entrar no controller, ele verifica uma requisção. Ou seja, a entrada do req é verificada pelo middleware pra depois executar os comandos da controller.
+Parada do Express, ele intercepta o controller e as rotas... Antes da rota entrar no controller, ele verifica uma requisição. Ou seja, a entrada do req é verificada pelo middleware pra depois executar os comandos da controller.
 
 Legal que caso tu fale pro router utilizar um middleware antes do comando de fato que tu quer executar, ele vai lógicamente executar o router e só depois rodar a requisição do controller. Claro que, isso acontece pelo simples fato do Middleware vir antes na ordem de execução do código, e caso dê erro lá dentro, ele já corta o resto da navegação do usuário dentro da api, app, ou sei lá o que.
 
@@ -147,10 +144,68 @@ Legal que caso tu fale pro router utilizar um middleware antes do comando de fat
 
 ## Aula 3
 
-Adicionada mais duas bibliotecas:
+Adicionada mais bibliotecas:
 
 ```bash
     #fs: Filesystem, adiciona ao node a possibilidade de ler arquivos
     #path: Path, serve para trabalhar com caminhos de pasta
-    yarn add fs path
+    #nodemailer: pacote de emails do node
+    #nodemailer-express-handlebars: pacote para trabalar com templates de email
+    yarn add fs path nodemailer nodemailer-express-handlebars
+```
+
+Para realizar os testes de e-mail, foi utilizado o site [MailTrap](https://mailtrap.io/).
+
+Ferramentas de e-mail do mundo real, de acordo com o vídeo de 2017:
+
+- SparkPost
+- MailChimp
+- SendGird
+- Mandrill
+
+### Utilizando o FileSystem para criar um index de importação de todos os arquivos de dentro de uma pasta
+
+Com o FileSystem e o Path, é possível varrer todos os arquivos dentro de uma determinada pasta e criar alguma instrução que utilize caminhos para realizar uma operação. No caso, foi utilizado o `forEach` onde é feita a varredura da pasta e, assim, criando uma instrução de require para todos os arquivos de dentro dela.
+
+A mágica é que se programa apenas uma vez esse index de importação, e assim todo arquivo criado ou deletado não cria uma necessidade de manuntenção de imports/requires em nenhum outro código!
+
+```javascript
+    //importando o filesystem
+    const fs = require('fs')
+    //importando o path
+    const path = require('path')
+
+    module.exports = app => {
+        //Falando pro filesystem ler um diretório
+        //READSYNC: indica este diretório
+        //FILTER: filtragem de arquivo. No caso, indexOf
+        //filtra se o primeiro caracter for um ponto (.),
+        //já que esses arquivos são geralmente arquivos de
+        //configuração e relacionados, e depois ele filtra
+        //este mesmo arquivo, o 'index.js'
+        //FOREACH: usando o forEach com uma função anônima, é
+        //possível sair dando require de cada um dos arquivos
+        //dentro da pasta __dirname, no caso, a própria pasta
+        //do arquivo.
+        //Logo, este arquivo ficou como um index de fato de
+        //todos os outros controllers da aplicação!
+        fs
+            .readdirSync(__dirname)
+            .filter(file => ((file.indexOf('.')) !== 0 && (file !== 'index.js') ))
+            .forEach( file => require(path.resolve(__dirname, file))(app))
+    }
+```
+
+### FindByIdAndUpdate (Mongo)
+
+Alterando um dado de um arquivo de acordo com seu id, executando o `FindByIdAnd...`, onde `...` pode ser Update, Delete ou Remove.
+
+```javascript
+    //Método do mongo, buscando pelo id e setando de acordo com o $set
+    await User.findByIdAndUpdate(user.id, {
+        '$set': {
+            passwordResetToken: token,
+            passwordResetExpires: now
+        }
+    })
 ```

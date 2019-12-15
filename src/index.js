@@ -11,11 +11,8 @@ app.use(bodyParser.json());
 // algo haver com receber informação via URL
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//incorpando a instância do app dentro do authcontroller
-require('./controllers/authcontroller')(app);
-//rodando o app.get lááaá da projectController, passando o app como
-//parâmetro, então meu eu do passado não estava tão errado
-require('./controllers/projectController')(app);
+// importando os controllers via o index!
+require('./app/controllers/index')(app)
 
 //selecionando a porta da aplicação!
 app.listen(3000);

@@ -1,5 +1,5 @@
 // Importando o mongoose
-const mongoose = require('../database');
+const mongoose = require('../../database');
 // importando a biblioteca de incriptação
 const bcrypt = require('bcryptjs')
 
@@ -21,6 +21,15 @@ const UserSchema = new mongoose.Schema({
         select: false 
         // não retorna caso a gente faça uma busca no banco
         // de dados
+    },
+    //Token do forgot password
+    passwordResetToken: {
+        type: String,
+        select: false
+    },
+    passwordResetExpires: {
+        type: Date,
+        select: false
     },
     createdAt: {
         type: Date,

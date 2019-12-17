@@ -216,7 +216,7 @@ Alterando um dado de um arquivo de acordo com seu id, executando o `FindByIdAnd.
 
 No exemplo que foi dado, quando acessamos a rota de visualização de todos os projetos, é retornado apenas o id do usuário. Uma maneria lógica de realizar a busca dos dados do usuário seria criando uma query separada para o retorno do id do usuário, correto? Talvez.
 Caso tivessemos 10.000 projetos cadastrados, teríamos que executar 10.001 querrys, já que seria uma query para buscar todos os projetos e 10.000 para cada usuário.
-Para isso, existe essa parada aí chamada Eager. Com o eager, conseguimos realizar a mesma operação, porém com apenas 2 querys.
+Para isso, existe essa parada aí chamada Eager. Com o Eager, conseguimos realizar a mesma operação, porém com apenas 2 querys.
 
 ```javascript
     //Assim, teria o retorno de todos os projetos mas

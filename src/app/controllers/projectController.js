@@ -65,9 +65,7 @@ router.put('/:projectId', async (req, res) => {
 router.delete('/:projectId', async (req, res) => {
     try {
         //Deletando um projeto baseado no id
-        const project = await Project.
-            findByIdAndRemove(req.params.projectId).
-            populate('user')
+        await Project.findByIdAndRemove(req.params.projectId)
 
         return res.send()
     } catch (err) {
